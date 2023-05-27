@@ -34,8 +34,6 @@ const defaultTheme = createTheme();
 const auth = getAuth(firebaseApp);
 
 export default function SignIn() {
-    const [currentUser, setCurrentUser] = useState(null);
-
     const handleSignIn = async (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
