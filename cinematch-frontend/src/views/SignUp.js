@@ -12,9 +12,10 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { getAuth, createUserWithEmailAndPassword} from 'firebase/auth';
-import firebaseApp from './firebase';
-import SignOut from './SignOut';
+import { getAuth, createUserWithEmailAndPassword} from '@firebase/auth';
+import firebaseApp from '../firebase';
+import { useNavigate } from 'react-router-dom';
+import SignIn from './SignIn';
 
 
 function Copyright(props) {
@@ -32,14 +33,18 @@ function Copyright(props) {
 
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
-const auth = getAuth(firebaseApp);
 
 export default function SignUp() {
+    const auth = getAuth(firebaseApp);
+    const navigate = useNavigate();
+
     const handleSignUp = async (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
         try {
             await createUserWithEmailAndPassword(auth, data.get('email'), data.get('password'))
+            console.log("You have created an account!")
+            navigate('/')
         }
         catch (error) {
             console.log(`There was an error: ${error}`)
@@ -119,7 +124,7 @@ export default function SignUp() {
                         </Button>
                         <Grid container justifyContent="flex-end">
                             <Grid item>
-                                <Link href="#" variant="body2">
+                                <Link href="/SignIn" variant="body2">
                                     Already have an account? Sign in
                                 </Link>
                             </Grid>

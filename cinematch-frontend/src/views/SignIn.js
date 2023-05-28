@@ -12,8 +12,9 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
-import firebaseApp from './firebase';
+import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from '@firebase/auth';
+import firebaseApp from '../firebase';
+import { useNavigate } from 'react-router-dom';
 
 function Copyright(props) {
     return (
@@ -31,21 +32,24 @@ function Copyright(props) {
 // TODO remove, this demo shouldn't need to reset the theme.
 
 const defaultTheme = createTheme();
-const auth = getAuth(firebaseApp);
 
 export default function SignIn() {
+    const auth = getAuth(firebaseApp);
+    const navigate = useNavigate();
+
     const handleSignIn = async (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        await signInWithEmailAndPassword(auth, data.get('email'), data.get('password'));
-        currentUser = user
-        console.log("singed in")
-    };
-
-    const handleSignOut = async () => {
-        console.log("singing out")
-        await signOut(auth);
-    };
+        try {
+            await signInWithEmailAndPassword(auth, data.get('email'), data.get('password'))
+            .then( () => {
+                console.log("You have signed in!");
+                navigate('/');
+            });
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     return (
         <ThemeProvider theme={defaultTheme}>
@@ -105,7 +109,7 @@ export default function SignIn() {
                                 </Link>
                             </Grid>
                             <Grid item>
-                                <Link href="#" variant="body2">
+                                <Link href="/SignUp" variant="body2">
                                     {"Don't have an account? Sign Up"}
                                 </Link>
                             </Grid>
