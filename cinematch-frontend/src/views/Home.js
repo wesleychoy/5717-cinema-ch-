@@ -6,13 +6,11 @@ function Home() {
   return (
     <div className="home">
       <div className="headerContainer">
-        <h1> cinema+ch </h1>
-        <p> SAY GOODBYE TO ENDLESS MOVIE-SEARCHING ! </p>
-        <Link to="/SignIn">
-          <button> START NOW </button>
+        <h1> WELCOME TO CINEMA+CH ! </h1>
+        <Link to="/">
+            <button> SIGN OUT </button>
         </Link>
       </div>
-      HelloWorld
     </div>
   )
 }
