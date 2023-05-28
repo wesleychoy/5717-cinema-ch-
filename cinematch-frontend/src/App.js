@@ -10,7 +10,7 @@ import Movies from "./views/Movies";
 export default function App() {
   return (
     <div className="App">
-      <Navbar />
+      <Navbar/>
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path="/home" element={<Home />} />

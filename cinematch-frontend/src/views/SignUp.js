@@ -43,7 +43,7 @@ export default function SignUp() {
         try {
             await createUserWithEmailAndPassword(auth, data.get('email'), data.get('password'))
             console.log("You have created an account!")
-            navigate('/')
+            navigate('/home')
         }
         catch (error) {
             console.log(`There was an error: ${error}`)
