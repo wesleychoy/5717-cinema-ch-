@@ -4,7 +4,8 @@ import SignUp from "./views/SignUp";
 import Landing from "./views/Landing";
 import Home from "./views/Home";
 import Navbar from "./components/Navbar";
-import Test from "./views/Test";
+import Recommendations from "./views/Recommendations";
+import Movies from "./views/Movies";
 
 export default function App() {
   return (
@@ -13,6 +14,8 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path="/home" element={<Home />} />
+        <Route path="/recommendations" element={<Recommendations/>} />
+        <Route path="/movies" element={<Movies/>} />
         <Route path="/signin" element={<SignIn />} />
         <Route path="/signup" element={<SignUp />} />
       </Routes>
