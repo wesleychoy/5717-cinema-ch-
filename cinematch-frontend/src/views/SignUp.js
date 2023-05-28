@@ -13,9 +13,8 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { getAuth, createUserWithEmailAndPassword} from '@firebase/auth';
-import firebaseApp from '../firebase';
+import firebaseApp from '../utils/firebase';
 import { useNavigate } from 'react-router-dom';
-import SignIn from './SignIn';
 
 
 function Copyright(props) {
@@ -124,7 +123,7 @@ export default function SignUp() {
                         </Button>
                         <Grid container justifyContent="flex-end">
                             <Grid item>
-                                <Link href="/SignIn" variant="body2">
+                                <Link href="/signin" variant="body2">
                                     Already have an account? Sign in
                                 </Link>
                             </Grid>

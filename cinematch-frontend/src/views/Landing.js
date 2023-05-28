@@ -3,9 +3,9 @@ import { Box } from '@mui/system';
 import * as React from 'react';
 import { useNavigate } from 'react-router';
 import { getAuth, signOut } from '@firebase/auth';
-import firebaseApp from '../firebase';
+import firebaseApp from '../utils/firebase';
 
-export default function Home() {
+export default function Landing() {
     const auth = getAuth(firebaseApp);
     const navigate = useNavigate();
 
