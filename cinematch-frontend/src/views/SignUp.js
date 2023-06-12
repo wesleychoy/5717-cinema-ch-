@@ -12,10 +12,10 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { getAuth, createUserWithEmailAndPassword} from '@firebase/auth';
+import { getAuth, createUserWithEmailAndPassword } from '@firebase/auth';
 import firebaseApp from '../utils/firebase';
 import { useNavigate } from 'react-router-dom';
-
+import { getFirestore, collection, addDoc } from '@firebase/firestore';
 
 function Copyright(props) {
     return (
@@ -35,18 +35,29 @@ const defaultTheme = createTheme();
 
 export default function SignUp() {
     const auth = getAuth(firebaseApp);
+    const db = getFirestore(firebaseApp);
     const navigate = useNavigate();
 
     const handleSignUp = async (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
         try {
-            await createUserWithEmailAndPassword(auth, data.get('email'), data.get('password'))
-            console.log("You have created an account!")
+            await createUserWithEmailAndPassword(auth, data.get('email'), data.get('password')).then(() => {
+                console.log("Account created with Firebase Auth");
+            });
+            
+            const docRef = await addDoc(collection(db, "users"), {
+                firstName: data.get('firstName'),
+                lastName: data.get('lastName'), 
+                username: data.get('username'),
+                email: data.get('email')  
+            }).then(() => {
+                console.log("Account details stored in Firebase Firestore");
+            });
             navigate('/home')
         }
         catch (error) {
-            console.log(`There was an error: ${error}`)
+            console.log(`There was an error: ${error}`);
         }
     };
 
@@ -89,6 +100,16 @@ export default function SignUp() {
                                     label="Last Name"
                                     name="lastName"
                                     autoComplete="family-name"
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <TextField
+                                    required
+                                    fullWidth
+                                    id="username"
+                                    label="Username"
+                                    name="username"
+                                    autoComplete="username"
                                 />
                             </Grid>
                             <Grid item xs={12}>
