@@ -12,8 +12,8 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from '@firebase/auth';
-import firebaseApp from '../utils/firebase';
+import { signInWithEmailAndPassword, onAuthStateChanged } from '@firebase/auth';
+import { auth } from '../utils/firebase';
 import { useNavigate } from 'react-router-dom';
 
 function Copyright(props) {
@@ -34,7 +34,6 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 export default function SignIn() {
-    const auth = getAuth(firebaseApp);
     const navigate = useNavigate();
 
     const handleSignIn = async (event) => {
