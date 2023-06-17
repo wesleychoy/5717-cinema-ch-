@@ -1,42 +1,63 @@
-import React, { useState } from 'react';
-import { auth, db } from '../utils/firebase';
-import { doc, setDoc } from '@firebase/firestore';
+import React, { useState, useEffect } from 'react';
+import { TextField, Button } from '@mui/material';
+import { db, auth } from '../utils/firebase';
+import { collection, query, or, where, getDocs, onSnapshot, addDoc, serverTimestamp } from '@firebase/firestore';
+import FriendRequest from '../components/FriendRequest';
 
-function Friends() {
-    const [formValue, setFormValue] = useState('');
-
-    const handleSubmitRequest = async () => {
+function FriendsPage() {
+    const currentUserUID = auth.currentUser.uid;
+    const queryRequestList = query(collection(db, 'friendRequests'),
+        or(where('sender', '==', `${currentUserUID}`),
+           where('receiver', '==', `${currentUserUID}`)
+        )
+    );
+    const [friendRequests, setFriendRequests] = useState([]);
+    const [input, setInput] = useState('');
+    useEffect(() => {
+        onSnapshot(queryRequestList, (snapshot) => {
+            setFriendRequests(snapshot.docs.map(doc => ({
+                id: doc.id,
+                item: doc.data()
+            })))
+        })
+    }, [input]);
+    const sendFriendRequest = async (e) => {
+        e.preventDefault();
         let data = {
-            sender: `${auth.currentUser.uid}`,
-            receiver: `${formValue}`,
-            status:'pending'
-        };
-        console.log(data);
-        try {
-            await setDoc(doc(db, "friendRequests", `${auth.currentUser.uid}`), {
-                sender: data.sender,
-                receiver: data.receiver, 
-                status: data.status
-            }).then(() => {
-                console.log("Friend Request logged in Firebase Firestore");
-            });
-            console.log("exit");
-        } catch (error) {
-            console.log(`There was an error: ${error}`);
+            sender: `${currentUserUID}`,
+            receiver: 'null',
+            receiverUsername: 'null',
+            status: 'pending',
+            timestamp: serverTimestamp()
         }
+        const queryUsername = query(collection(db, 'users'), where('username', '==', `${input}`));
+        const queryUsernameSnapshot = await getDocs(queryUsername);
+        queryUsernameSnapshot.forEach((doc) => {
+            data.receiver = doc.id;
+        });
+        await addDoc(collection(db, 'friendRequests'), {
+            sender: data.sender,
+            receiver: data.receiver,
+            receiverUsername: `${input}`,
+            status: data.status,
+            timestamp: data.timestamp
+        }).then(() => {
+            console.log('Friend Request sent!');
+            setInput('')
+        })
     };
-    
-  return (
-    <div className='friends'>
-        <div className='text'>
-            <h1>hi</h1>
-            <form onSubmit={handleSubmitRequest}>
-                <input placeholder="input friend's username" value ={formValue} onChange={(e) => setFormValue(e.target.value)}></input>
-                <button type = "submit">send</button>
+    return (
+        <div className="friends">
+            <h2> Friend Requests List </h2>
+            <form>
+                <TextField id="outlined-basic" label="Input Username" variant="outlined" style={{ margin: "0px 5px" }} size="small" value={input}
+                    onChange={e => setInput(e.target.value)} />
+                <Button variant="contained" color="primary" onClick={sendFriendRequest}>Send Request</Button>
             </form>
+            <ul>
+                {friendRequests.map(item => <FriendRequest key={item.id} arr={item} />)}
+            </ul>
         </div>
-    </div>
-  );
+    );
 }
-
-export default Friends
+export default FriendsPage;
