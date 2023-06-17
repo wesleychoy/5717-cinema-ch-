@@ -3,6 +3,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import DoneIcon from '@mui/icons-material/Done';
 import { db, auth } from '../utils/firebase';
 import { doc, deleteDoc, setDoc } from '@firebase/firestore';
+import '../styles/FriendRequest.css';
 
 const FriendRequest = ({ arr }) => {
     let isReceiver = arr.item.receiver == auth.currentUser.uid;
