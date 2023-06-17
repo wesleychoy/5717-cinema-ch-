@@ -4,6 +4,7 @@ import { db, auth } from '../utils/firebase';
 import { collection, query, or, where, getDocs, onSnapshot, addDoc, and, doc, getDoc } from '@firebase/firestore';
 import FriendRequest from '../components/FriendRequest';
 import Friend from '../components/Friend';
+import SearchBar from '../components/SearchBar';
 
 function FriendsPage() {
     const currentUserUID = auth.currentUser.uid;
@@ -81,6 +82,7 @@ function FriendsPage() {
         <div className="friends">
             <h2> Friend Requests List </h2>
             <form>
+                <SearchBar>Input Username</SearchBar>
                 <TextField id="outlined-basic" label="Input Username" variant="outlined" style={{ margin: "0px 5px" }} size="small" value={input}
                     onChange={e => setInput(e.target.value)} />
                 <Button variant="contained" color="primary" onClick={sendFriendRequest}>Send Request</Button>
