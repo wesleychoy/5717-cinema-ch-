@@ -82,7 +82,6 @@ function FriendsPage() {
         <div className="friends">
             <h2> Friend Requests List </h2>
             <form>
-                <SearchBar>Input Username</SearchBar>
                 <TextField id="outlined-basic" label="Input Username" variant="outlined" style={{ margin: "0px 5px" }} size="small" value={input}
                     onChange={e => setInput(e.target.value)} />
                 <Button variant="contained" color="primary" onClick={sendFriendRequest}>Send Request</Button>
@@ -95,6 +94,7 @@ function FriendsPage() {
             <ul>
                 {friends.map(item => <Friend key={item.id} arr={item} />)}
             </ul>
+            <SearchBar />
         </div>
     );
 }
