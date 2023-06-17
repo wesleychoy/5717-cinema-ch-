@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { TextField, Button } from '@mui/material';
 import { db, auth } from '../utils/firebase';
-import { collection, query, or, where, getDocs, onSnapshot, addDoc, and } from '@firebase/firestore';
+import { collection, query, or, where, getDocs, onSnapshot, addDoc, and, doc, getDoc } from '@firebase/firestore';
 import FriendRequest from '../components/FriendRequest';
 import Friend from '../components/Friend';
 
@@ -44,10 +44,15 @@ function FriendsPage() {
                 sender: `${currentUserUID}`,
                 receiver: 'null',
                 receiverUsername: 'null',
+                senderUsername: 'null',
                 status: 'pending'
             }
-            const queryUsername = query(collection(db, 'users'), where('username', '==', `${input}`));
-            await getDocs(queryUsername).then((snapshot) => {
+            const currentUserDocRef = doc(db, 'users', `${currentUserUID}`);
+            await getDoc(currentUserDocRef).then((doc) => {
+                data.senderUsername = doc.data().username;
+            })
+            const queryReceiverUsername = query(collection(db, 'users'), where('username', '==', `${input}`));
+            await getDocs(queryReceiverUsername).then((snapshot) => {
                 if (snapshot.empty) {
                     throw new Error('No user found');
                 } else {
@@ -60,6 +65,7 @@ function FriendsPage() {
                     sender: data.sender,
                     receiver: data.receiver,
                     receiverUsername: `${input}`,
+                    senderUsername: data.senderUsername,
                     status: data.status
                 })
             }).then(() => {

@@ -5,12 +5,12 @@ import { db, auth } from '../utils/firebase';
 import { doc, deleteDoc, setDoc } from '@firebase/firestore';
 
 const FriendRequest = ({ arr }) => {
-    let toAccept = arr.item.receiver == auth.currentUser.uid;
-    return toAccept ? (
+    let isReceiver = arr.item.receiver == auth.currentUser.uid;
+    return isReceiver ? (
         <List className="friendRequest__list">
         <ListItem>
             <ListItemAvatar />
-            <ListItemText primary={arr.item.receiverUsername} secondary={arr.item.status} />
+            <ListItemText primary={arr.item.senderUsername} secondary={arr.item.status} />
         </ListItem>
         <DeleteIcon
             fontSize="large"
@@ -27,6 +27,7 @@ const FriendRequest = ({ arr }) => {
                     sender: arr.item.sender,
                     receiver: arr.item.receiver,
                     receiverUsername: arr.item.receiverUsername,
+                    senderUsername: arr.item.senderUsername,
                     status: 'accepted'
                 });
             }}
