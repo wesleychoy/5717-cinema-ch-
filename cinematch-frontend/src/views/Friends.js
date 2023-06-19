@@ -4,7 +4,7 @@ import { db, auth } from '../utils/firebase';
 import { collection, query, or, where, getDocs, onSnapshot, addDoc, and, doc, getDoc } from '@firebase/firestore';
 import FriendRequest from '../components/FriendRequest';
 import Friend from '../components/Friend';
-import SearchBar from '../components/SearchBar';
+// import SearchBar from '../components/SearchBar';
 
 function FriendsPage() {
     const currentUserUID = auth.currentUser.uid;
@@ -94,7 +94,6 @@ function FriendsPage() {
             <ul>
                 {friends.map(item => <Friend key={item.id} arr={item} />)}
             </ul>
-            <SearchBar />
         </div>
     );
 }
