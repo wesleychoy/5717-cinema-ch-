@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { TextField, Button } from '@mui/material';
+import Autocomplete from '@mui/material/Autocomplete';
 import { db, auth } from '../utils/firebase';
 import { collection, query, or, where, getDocs, onSnapshot, addDoc, and, doc, getDoc } from '@firebase/firestore';
 import FriendRequest from '../components/FriendRequest';
 import Friend from '../components/Friend';
-// import SearchBar from '../components/SearchBar';
 
-function FriendsPage() {
+function Friends() {
     const currentUserUID = auth.currentUser.uid;
     const queryRequestList = query(collection(db, 'friendRequests'), and (
         where('status', '==', 'pending'), 
@@ -23,6 +23,7 @@ function FriendsPage() {
     const [friendRequests, setFriendRequests] = useState([]);
     const [friends, setFriends] = useState([]);
     const [input, setInput] = useState('');
+    const [users, setUsers] = useState([]);
     const [errorMessage, setErrorMessage] = useState('');
     useEffect(() => {
         onSnapshot(queryRequestList, (snapshot) => {
@@ -37,9 +38,17 @@ function FriendsPage() {
                 item: doc.data()
             })))
         })
+        const fetchUsers = async () => {
+            const querySnapshot = await getDocs(collection(db, "users"))
+            setUsers(querySnapshot.docs.map(doc => ({
+                label: doc.data().username
+            })))
+        };
+        fetchUsers();
     }, [input]);
     const sendFriendRequest = async (e) => {
         e.preventDefault();
+        console.log(input);
         try {
             let data = {
                 sender: `${currentUserUID}`,
@@ -52,12 +61,26 @@ function FriendsPage() {
             await getDoc(currentUserDocRef).then((doc) => {
                 data.senderUsername = doc.data().username;
             })
-            const queryReceiverUsername = query(collection(db, 'users'), where('username', '==', `${input}`));
+            const queryReceiverUsername = query(collection(db, 'users'), where('username', '==' , `${input}`));
             await getDocs(queryReceiverUsername).then((snapshot) => {
+                setErrorMessage('')
                 if (snapshot.empty) {
                     throw new Error('No user found');
                 } else {
                     snapshot.forEach((doc) => {
+                        if (doc.id == currentUserUID) {
+                            throw new Error('Cannot send request to yourself!')
+                        }
+                        friendRequests.forEach((request) => {
+                            if ((doc.id == request.item.receiver && request.item.sender == currentUserUID) || (doc.id == request.item.sender && request.item.receiver == currentUserUID)) {
+                                throw new Error('Request already exists!')
+                            }
+                        })
+                        friends.forEach((friend) => {
+                            if ((doc.id == friend.item.receiver && friend.item.sender == currentUserUID) || (doc.id == friend.item.sender && friend.item.receiver == currentUserUID)) {
+                                throw new Error('Friendship already exists!')
+                            }
+                        })
                         data.receiver = doc.id;
                     });
                 }
@@ -76,16 +99,25 @@ function FriendsPage() {
         } catch (error) {
             setErrorMessage(`${error}`);
         }
-        
     };
+    
     return (
         <div className="friends">
             <h2> Friend Requests List </h2>
-            <form>
-                <TextField id="outlined-basic" label="Input Username" variant="outlined" style={{ margin: "0px 5px" }} size="small" value={input}
-                    onChange={e => setInput(e.target.value)} />
+            <Autocomplete
+                disablePortal
+                id="outlined-basic"
+                options={users}
+                sx={{ width: 300 }}
+                onChange={(event, value) => {
+                    event.preventDefault();
+                    if (value) {
+                        setInput(value.label)}
+                    }
+                }
+                renderInput={(params) => <TextField {...params} label="Input Username"/>}
+                />
                 <Button variant="contained" color="primary" onClick={sendFriendRequest}>Send Request</Button>
-            </form>
             {errorMessage && <div className="error"> {errorMessage} </div>}
             <ul>
                 {friendRequests.map(item => <FriendRequest key={item.id} arr={item} />)}
@@ -97,4 +129,5 @@ function FriendsPage() {
         </div>
     );
 }
-export default FriendsPage;
+
+export default Friends;
