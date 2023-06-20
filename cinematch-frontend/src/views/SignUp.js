@@ -3,8 +3,6 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
@@ -12,10 +10,10 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { getAuth, createUserWithEmailAndPassword } from '@firebase/auth';
-import firebaseApp from '../utils/firebase';
+import { createUserWithEmailAndPassword } from '@firebase/auth';
+import { auth, db } from '../utils/firebase';
 import { useNavigate } from 'react-router-dom';
-import { getFirestore, collection, addDoc } from '@firebase/firestore';
+import { doc, setDoc } from '@firebase/firestore';
 
 function Copyright(props) {
     return (
@@ -34,8 +32,6 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 export default function SignUp() {
-    const auth = getAuth(firebaseApp);
-    const db = getFirestore(firebaseApp);
     const navigate = useNavigate();
 
     const handleSignUp = async (event) => {
@@ -45,8 +41,8 @@ export default function SignUp() {
             await createUserWithEmailAndPassword(auth, data.get('email'), data.get('password')).then(() => {
                 console.log("Account created with Firebase Auth");
             });
-            
-            const docRef = await addDoc(collection(db, "users"), {
+
+            await setDoc(doc(db, "users", `${auth.currentUser.uid}`), {
                 firstName: data.get('firstName'),
                 lastName: data.get('lastName'), 
                 username: data.get('username'),
