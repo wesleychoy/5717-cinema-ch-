@@ -4,28 +4,33 @@ import { Link } from 'react-router-dom';
 import ReorderIcon from '@mui/icons-material/Reorder';
 import '../styles/Navbar.css'
 import Dropdown from './Dropdown';
+import { useNavigate } from 'react-router-dom';
+import { signOut } from "firebase/auth";
+import { auth } from '../utils/firebase';
 
 function Navbar() {
     const [openLinks, setOpenLinks] = useState(false);
+    const navigate = useNavigate();
 
     const toggleNavbar = () => {
       setOpenLinks(!openLinks)
     };
 
     const handleMenuOne = () => {
-      console.log('clicked one');
+      navigate('/user/profile')
     };
   
     const handleMenuTwo = () => {
-      console.log('clicked two');
+      navigate('/user/history')
     };  
 
     const handleMenuThree = () => {
-      console.log('clicked three');
+      navigate('/user/account')
     };
 
     const handleMenuFour = () => {
-      console.log('clicked four');
+      signOut(auth);
+      navigate('/');
     };
 
   return (
@@ -55,7 +60,7 @@ function Navbar() {
         menu={[
           <button onClick={handleMenuOne}>Profile</button>,
           <button onClick={handleMenuTwo}>History</button>,
-          <button onClick={handleMenuThree}>Account Settings</button>,
+          <button onClick={handleMenuThree}>Account</button>,
           <button onClick={handleMenuFour}>Log Out</button>,
         ]}
         />  

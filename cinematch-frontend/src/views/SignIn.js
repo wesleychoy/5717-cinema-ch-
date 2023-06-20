@@ -43,7 +43,7 @@ export default function SignIn() {
             await signInWithEmailAndPassword(auth, data.get('email'), data.get('password'))
             .then( () => {
                 console.log("You have signed in!");
-                navigate('/home');
+                navigate('/');
             });
         } catch (error) {
             console.log(error);
