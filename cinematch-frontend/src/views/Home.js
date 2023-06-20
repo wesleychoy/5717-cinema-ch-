@@ -39,9 +39,7 @@ function Home() {
     <div className="home">
       <div className="headerContainer">
         <h1> WELCOME TO CINEMA+CH ! </h1>
-        <Link to="/">
-            <button> SIGN OUT </button>
-        </Link>
+        <button> SIGN OUT </button>
         <h1> cinema+ch </h1>
         <p> SAY GOODBYE TO ENDLESS MOVIE-SEARCHING ! </p>
         <h1> Rate Previously Watched Movies</h1>
