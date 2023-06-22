@@ -42,15 +42,20 @@ export default function SignUp() {
                 console.log("Account created with Firebase Auth");
             });
 
-            await setDoc(doc(db, "users", `${auth.currentUser.uid}`), {
+            const document = await setDoc(doc(db, "users", `${auth.currentUser.uid}`), {
                 firstName: data.get('firstName'),
                 lastName: data.get('lastName'), 
                 username: data.get('username'),
                 email: data.get('email')  
-            }).then(() => {
-                console.log("Account details stored in Firebase Firestore");
-            });
-            navigate('/home')
+            }).then( async () => {
+                await setDoc(doc(db, `users/${auth.currentUser.uid}/history`, "cinematch-dummy-doc"), {
+                    movie: 'dummy',
+                    rating: 100
+            })
+            }).then(
+                console.log("wrote user to database"),
+                navigate('/home')
+            )
         }
         catch (error) {
             console.log(`There was an error: ${error}`);

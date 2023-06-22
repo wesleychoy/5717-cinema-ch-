@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import "../styles/Home.css";
 import TextField from '@mui/material/TextField';
@@ -6,6 +6,9 @@ import Autocomplete from '@mui/material/Autocomplete';
 import Rating from '@mui/material/Rating';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
+import { Button } from '@mui/base';
+import { auth, db } from '../utils/firebase';
+import { doc, collection, deleteDoc, setDoc } from '@firebase/firestore';
 
 const films = [
   { label: 'Once Upon A Time In Hollywood'},
@@ -33,13 +36,27 @@ const films = [
 ];
 
 function Home() {
-  const [value, setValue] = React.useState(2);
+  const [rating, setRating] = useState(0);
+  const [movie, setMovie] = useState();
+
+  const sendRating = async (e) => {
+    e.preventDefault();
+    const historyCollectionRef = collection(db, `users/${auth.currentUser.uid}/history`);
+    try {
+        await setDoc(doc(db, `users/${auth.currentUser.uid}/history`, `${movie}`), {
+          movie: `${movie}`,
+          rating: rating
+        })
+        await deleteDoc(doc(db, `users/${auth.currentUser.uid}/history`, "cinematch-dummy-doc"));
+    } catch (error) {
+      console.log(error)
+    }
+  }
   
   return (
     <div className="home">
       <div className="headerContainer">
         <h1> WELCOME TO CINEMA+CH ! </h1>
-        <button> SIGN OUT </button>
         <h1> cinema+ch </h1>
         <p> SAY GOODBYE TO ENDLESS MOVIE-SEARCHING ! </p>
         <h1> Rate Previously Watched Movies</h1>
@@ -48,7 +65,13 @@ function Home() {
           id="movie-search"
           options={films}
           sx={{ width: 300 }}
-          renderInput={(params) => <TextField {...params} label="Movie" />}
+          onChange={(event, value) => {
+            event.preventDefault();
+            if (value) {
+              setMovie(value.label);
+            }
+          }}
+          renderInput={(params) => <TextField {...params} label="Input Movie"/>}
         />
         <Box
           sx={{
@@ -58,12 +81,13 @@ function Home() {
           <Typography component="legend">Rating</Typography>
           <Rating
             name="simple-controlled"
-            value={value}
-            onChange={(event, newValue) => {
-              setValue(newValue);
+            value={rating}
+            onChange={(event, value) => {
+              setRating(value);
             }}
           />
         </Box>
+          <Button variant="contained" color="primary" onClick={sendRating}>Submit rating</Button>
       </div>
     </div>
   );
