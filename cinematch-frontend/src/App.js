@@ -2,15 +2,12 @@ import { useState, useEffect } from "react";
 import { Route, Routes, Navigate } from "react-router-dom";
 import SignIn from "./views/SignIn";
 import SignUp from "./views/SignUp";
-import Landing from "./views/Landing";
 import Home from "./views/Home";
 import Navbar from "./components/Navbar";
 import Recommendations from "./views/Recommendations";
 import Movies from "./views/Movies";
 import Friends from "./views/Friends";
 import Profile from "./views/User/Profile";
-import History from "./views/User/History";
-import Account from "./views/User/Account";
 import Protected from "./views/Protected";
 import { auth } from './utils/firebase';
 import { onAuthStateChanged } from "firebase/auth";
@@ -42,9 +39,7 @@ export default function App() {
         <Route path="/signin" element={<SignIn />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/friends" element={<Protected isSignedIn={isSignedIn}><Friends /></Protected>} />
-        <Route path="/user/profile" element={<Protected isSignedIn={isSignedIn}><Profile /></Protected>} />
-        <Route path="/user/history" element={<Protected isSignedIn={isSignedIn}><History /></Protected>} />
-        <Route path="/user/account" element={<Protected isSignedIn={isSignedIn}><Account /></Protected>} />  
+        <Route path="/user/profile" element={<Protected isSignedIn={isSignedIn}><Profile /></Protected>} /> 
       </Routes>
     </div>
   );

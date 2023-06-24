@@ -17,14 +17,6 @@ function NavBar() {
     navigate('/user/profile')
   };
       
-  const handleMenuTwo = () => {
-    navigate('/user/history')
-  };  
-    
-  const handleMenuThree = () => {
-    navigate('/user/account')
-  };
-    
   const handleMenuFour = () => {
     signOut(auth);
     navigate('/');
@@ -90,8 +82,6 @@ function NavBar() {
               trigger={<text className="nav-links">User</text>}
               menu={[
                 <button onClick={handleMenuOne}>Profile</button>,
-                <button onClick={handleMenuTwo}>History</button>,
-                <button onClick={handleMenuThree}>Account</button>,
                 <button onClick={handleMenuFour}>Log Out</button>,
               ]}
               />
