@@ -29,7 +29,6 @@ export default function App() {
         setIsSignedIn(false);
       }
     });
-    // console.log(currentUser);
   }, [currentUser]);
 
   return (
