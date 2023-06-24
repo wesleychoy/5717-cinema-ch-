@@ -36,8 +36,13 @@ const films = [
 ];
 
 function Home() {
+  const [message, setMessage] = useState('');
   const [rating, setRating] = useState(0);
   const [movie, setMovie] = useState();
+  
+  const timeout = async (delay) => {
+    return new Promise( res => setTimeout(res, delay) );
+  } 
 
   const sendRating = async (e) => {
     e.preventDefault();
@@ -47,7 +52,13 @@ function Home() {
           movie: `${movie}`,
           rating: rating
         })
-        await deleteDoc(doc(db, `users/${auth.currentUser.uid}/history`, "cinematch-dummy-doc"));
+        await deleteDoc(doc(db, `users/${auth.currentUser.uid}/history`, "cinematch-dummy-doc")).then(async () => {
+          setMessage('Rating submitted!');
+          await timeout(1500).then(() => {
+            setMessage('');
+          })
+        })
+
     } catch (error) {
       console.log(error)
     }
@@ -88,6 +99,7 @@ function Home() {
           />
         </Box>
           <Button variant="contained" color="primary" onClick={sendRating}>Submit rating</Button>
+          {message && <div className="message"> {message} </div>}
       </div>
     </div>
   );

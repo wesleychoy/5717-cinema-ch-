@@ -1,18 +1,28 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { collection, query, or, where, getDocs, onSnapshot, addDoc, and, doc, getDoc } from '@firebase/firestore';
+import { db, auth } from '../../utils/firebase';
+import ViewHistory from '../../components/ViewHistory';
 
 function History() {
-  return (
-    <div className='recommendations'>
-        <div className='text'>
-            <h1>Based on What You Watched</h1>
-            <p>Dark Knight, Now You See Me, Avengers</p>
-            <h1>What Users With Similar Tastes Enjoyed</h1>
-            <p>Iron Man 1, Guardians of the Galaxy, Catch Me If You Can</p>
-            <h1>Most Popular Movies</h1>
-            <p>Everything Everywhere All At Once, John Wick 4, Conjuring</p>
-        </div>
-    </div>
-  );
-}
+  const [history, setHistory] = useState([]);
+  const currentUserUID = auth.currentUser.uid;
+  const queryHistory = query(collection(db, "users", `${currentUserUID}`, "history"))
+  useEffect(() => {
+    onSnapshot(queryHistory, (snapshot) => {
+      setHistory(snapshot.docs.map(doc => ({
+          id: doc.id,
+          item: doc.data()
+      })))
+    })
+  }, []);
 
+  return (
+    <div>
+      <h2> Movie Ratings </h2>
+        <ul>
+          {history.map(item => <ViewHistory key={item.id} arr={item} />)}
+        </ul>
+    </div>
+  )
+}
 export default History
