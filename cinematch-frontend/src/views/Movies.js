@@ -1,75 +1,126 @@
-import React from 'react';
-import TextField from '@mui/material/TextField';
-import Autocomplete from '@mui/material/Autocomplete';
+import React, { useState, useEffect }  from 'react';
+import SearchIcon from "../assets/SearchIcon.png";
+import FilmIcon from "../components/FilmIcon";
+import "../styles/Movies.css";
+const API_URL = "http://www.omdbapi.com/?i=tt3896198&apikey=d974252a";
 
-const films = [
-    { label: 'Once Upon A Time In Hollywood'},
-    { label: 'The Dark Knight'},
-    { label: 'Interstellar'},
-    { label: 'Fight Club'},
-    { label: 'Wolf of Wall Street'},
-    { label: 'Catch Me If You Can'},
-    { label: 'Avengers'},
-    { label: 'Iron Man 1'},
-    { label: 'Iron Man 2'},
-    { label: 'Iron Man 3'},
-    { label: 'The Amazing Spiderman'},
-    { label: 'Goodfellas'},
-    { label: 'Saving Private Ryan'},
-    { label: 'Back to the Future'},
-    { label: 'Whiplash'},
-    { label: 'Alien'},
-    { label: 'WALL·E'},
-    { label: 'The Dark Knight Rises'},
-    { label: 'Inglourious Basterds'},
-    { label: 'Toy Story 1'},
-    { label: 'Toy Story 2'},
-    { label: 'Toy Story 3'},
-];
 
-function Movies() {
-  return (
-    <div className='Movies'>
-        <div className='catalogue'>
-        <button>
-            Horror
-        </button>
-        <button>
-            Comedy
-        </button>
-        <button>
-            Thriller
-        </button>
-        <button>
-            Family
-        </button>
-        <button>
-            Action
-        </button>
-        <button>
-            Asian
-        </button>
-        <button>
-            Hollywood
-        </button>
-        <button>
-            Sci-Fi
-        </button>
-        <button>
-            Anime
-        </button>
-        <h1> Movies Catalogue </h1>
-        <h1> Search Movies</h1>
-        <Autocomplete
-          disablePortal
-          id="movie-catalogue"
-          options={films}
-          sx={{ width: 300 }}
-          renderInput={(params) => <TextField {...params} label="Movie" />}
-        />
+const Movies = ({ film }) => {
+    const [searchTerm, setSearchTerm] = useState([]);
+    const [films, setFilms] = useState([]);
+  
+    const searchFilms = async (title) => { 
+        const response = await fetch(`${API_URL}&s=${title}`); 
+        const data = response.json(); 
+        console.log(data)
+        setFilms(data.Search);
+    }
+
+    useEffect(() => {
+      //searchFilms("Batman");
+    }, [searchTerm]);
+
+    const handleKeyPress = (event) => {
+        if (event.key === "Enter") {
+            searchFilms(searchTerm);
+        }
+    };
+
+    return (
+        <div className='Movies'>
+            <div className='genres'>
+                <button>
+                    Action
+                </button>
+                <button>
+                    Adult
+                </button>
+                <button>
+                    Adventure
+                </button>
+                <button>
+                    Animation
+                </button>
+                <button>
+                    Biography
+                </button>
+                <button>
+                    Comedy
+                </button>
+                <button>
+                    Documentary
+                </button>
+                <button>
+                    Drama
+                </button>
+                <button>
+                    Fantasy
+                </button>
+                <button>
+                    History
+                </button>
+                <button>
+                    Horror
+                </button>
+                <button>
+                    Musical
+                </button>
+                <button>
+                    Mystery
+                </button>
+                <button>
+                    Romance
+                </button>
+                <button>
+                    Sci-Fi
+                </button>
+                <button>
+                    Sport
+                </button>
+                <button>
+                    Fantasy
+                </button>
+                <button>
+                    Thriller
+                </button>
+                <button>
+                    War
+                </button>
+                <button>
+                    Western
+                </button>
+            </div>
+            <div className='catalogue'>
+                <h1> Movies Catalogue </h1>
+                <div className='search'>
+                    <input 
+                        placeholder='Search for Movies'
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                    />
+                    <img
+                        src={SearchIcon}
+                        alt="search"
+                        onClick={() => {searchFilms(searchTerm);
+                        }}
+                        onKeyDown={handleKeyPress}
+                    /> 
+                </div>
+                {films?.length > 0
+                    ? (
+                        <div className = "container">
+                            {films.map((film) => (
+                                <FilmIcon film={film} />
+                            ))}
+                        </div>
+                    ) : (
+                        <div className='empty'>
+                            <h2>No movies found</h2>
+                        </div>
+                    )}
+            </div>
         </div>
-    </div>
-  );
-}
+    );
+};
 
-export default Movies
+export default Movies;

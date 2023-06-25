@@ -1,18 +1,137 @@
-import React from 'react';
+import React, { useRef, useState } from "react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import Placeholder from "../assets/movieposters/batman.jpeg"
 
-function Recommendations() {
+// Import Swiper styles
+import "swiper/css";
+import "swiper/css/pagination";
+import 'swiper/css/navigation';
+import "../styles/Slider.css";
+
+import { Pagination, Navigation } from "swiper";
+
+export default function Recommendations() {
   return (
-    <div className='recommendations'>
-        <div className='text'>
-            <h1>Based on What You Watched</h1>
-            <p>Dark Knight, Now You See Me, Avengers</p>
-            <h1>What Users With Similar Tastes Enjoyed</h1>
-            <p>Iron Man 1, Guardians of the Galaxy, Catch Me If You Can</p>
-            <h1>Most Popular Movies</h1>
-            <p>Everything Everywhere All At Once, John Wick 4, Conjuring</p>
-        </div>
+    <div className = 'reccs'>
+      <div className='sliders'>
+        <h1>Based On What You Watched</h1>
+        <Swiper
+          modules={[Pagination, Navigation]}
+          slidesPerView={3}
+          spaceBetween={10}
+          navigation
+          pagination={{
+            clickable: true,
+          }}
+          onSwiper={(swiper) => console.log(swiper)}
+          onSlideChange={() => console.log('slide change')}
+        >
+          <SwiperSlide>
+            <img src={Placeholder} alt="Batman" />
+          </SwiperSlide>
+          <SwiperSlide>
+            <img src={Placeholder} alt="Batman" />
+          </SwiperSlide>
+          <SwiperSlide>
+            <img src={Placeholder} alt="Batman" />
+          </SwiperSlide>
+          <SwiperSlide>
+            <img src={Placeholder} alt="Batman" />
+          </SwiperSlide>
+          <SwiperSlide>
+            <img src={Placeholder} alt="Batman" />
+          </SwiperSlide>
+          <SwiperSlide>
+            <img src={Placeholder} alt="Batman" />
+          </SwiperSlide>
+          <SwiperSlide>
+            <img src={Placeholder} alt="Batman" />
+          </SwiperSlide>
+          <SwiperSlide>
+            <img src={Placeholder} alt="Batman" />
+          </SwiperSlide>
+        </Swiper>
+      </div>
+      <div className='sliders'>
+        <h1>What Users With Similar Tastes Enjoyed</h1>
+        <Swiper
+          modules={[Pagination, Navigation]}
+          slidesPerView={3}
+          spaceBetween={10}
+          navigation
+          pagination={{
+            clickable: true,
+          }}
+          onSwiper={(swiper) => console.log(swiper)}
+          onSlideChange={() => console.log('slide change')}
+        >
+          <SwiperSlide>
+            <img src={Placeholder} alt="Batman" />
+          </SwiperSlide>
+          <SwiperSlide>
+            <img src={Placeholder} alt="Batman" />
+          </SwiperSlide>
+          <SwiperSlide>
+            <img src={Placeholder} alt="Batman" />
+          </SwiperSlide>
+          <SwiperSlide>
+            <img src={Placeholder} alt="Batman" />
+          </SwiperSlide>
+          <SwiperSlide>
+            <img src={Placeholder} alt="Batman" />
+          </SwiperSlide>
+          <SwiperSlide>
+            <img src={Placeholder} alt="Batman" />
+          </SwiperSlide>
+          <SwiperSlide>
+            <img src={Placeholder} alt="Batman" />
+          </SwiperSlide>
+          <SwiperSlide>
+            <img src={Placeholder} alt="Batman" />
+          </SwiperSlide>
+        </Swiper>
+      </div>
+      <div className='sliders'>
+        <h1>Most Popular Movies</h1>
+        <Swiper
+          modules={[Pagination, Navigation]}
+          slidesPerView={3}
+          spaceBetween={10}
+          navigation
+          pagination={{
+            clickable: true,
+          }}
+          onSwiper={(swiper) => console.log(swiper)}
+          onSlideChange={() => console.log('slide change')}
+        >
+          <SwiperSlide>
+            <img src={Placeholder} alt="Batman" />
+          </SwiperSlide>
+          <SwiperSlide>
+            <img src={Placeholder} alt="Batman" />
+          </SwiperSlide>
+          <SwiperSlide>
+            <img src={Placeholder} alt="Batman" />
+          </SwiperSlide>
+          <SwiperSlide>
+            <img src={Placeholder} alt="Batman" />
+          </SwiperSlide>
+          <SwiperSlide>
+            <img src={Placeholder} alt="Batman" />
+          </SwiperSlide>
+          <SwiperSlide>
+            <img src={Placeholder} alt="Batman" />
+          </SwiperSlide>
+          <SwiperSlide>
+            <img src={Placeholder} alt="Batman" />
+          </SwiperSlide>
+          <SwiperSlide>
+            <img src={Placeholder} alt="Batman" />
+          </SwiperSlide>
+        </Swiper>
+      </div>
     </div>
   );
 }
 
-export default Recommendations
+
