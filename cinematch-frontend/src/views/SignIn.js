@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState } from "react";
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -35,6 +35,7 @@ const defaultTheme = createTheme();
 
 export default function SignIn() {
     const navigate = useNavigate();
+    const [error, setError] = useState('');
 
     const handleSignIn = async (event) => {
         event.preventDefault();
@@ -46,7 +47,15 @@ export default function SignIn() {
                 navigate('/');
             });
         } catch (error) {
-            console.log(error);
+            if (error.code == 'auth/wrong-password') {
+                setError('Invalid password. Please try again!')
+            } else if (error.code == 'auth/user-not-found') {
+                setError('Invalid email. Please try again!')
+            } else if (error.code == 'auth/too-many-requests') {
+                setError('Too many attempts with wrong credentials. Please try again later!')
+            } else {
+                console.log(error.message)
+            }
         }
     }
 
@@ -93,6 +102,7 @@ export default function SignIn() {
                             control={<Checkbox value="remember" color="primary" />}
                             label="Remember me"
                         />
+                        {error && <div className="error"> {error} </div>}
                         <Button
                             type="submit"
                             fullWidth
