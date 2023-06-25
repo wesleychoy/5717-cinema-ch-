@@ -89,7 +89,7 @@ function Home() {
             '& > legend': { mt: 3 },
           }}
         >
-          <Typography component="legend">Rating</Typography>
+          <Typography color='black' component="legend">Rating</Typography>
           <Rating
             name="simple-controlled"
             value={rating}
