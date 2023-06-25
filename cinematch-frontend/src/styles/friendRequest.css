@@ -1,5 +1,6 @@
 .friendRequest__list{
     display:flex;
+    color: black;
     justify-content: center;
     align-items: center;
     width: 800px;
