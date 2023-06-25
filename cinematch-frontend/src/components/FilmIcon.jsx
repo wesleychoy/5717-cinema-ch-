@@ -1,7 +1,6 @@
 import React from 'react';
 
 const FilmIcon = ({ film }) => {
-    const film = Film;
     return (
         <div className='film'>
             <div>
