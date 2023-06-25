@@ -5,6 +5,7 @@ import { db, auth } from '../utils/firebase';
 import { collection, query, or, where, getDocs, onSnapshot, addDoc, and, doc, getDoc } from '@firebase/firestore';
 import FriendRequest from '../components/FriendRequest';
 import Friend from '../components/Friend';
+import "../styles/Friend.css";
 
 function Friends() {
     const currentUserUID = auth.currentUser.uid;

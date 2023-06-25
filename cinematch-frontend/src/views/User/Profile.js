@@ -3,6 +3,7 @@ import { collection, query, onSnapshot } from '@firebase/firestore';
 import { db, auth } from '../../utils/firebase';
 import ViewHistory from '../../components/ViewHistory';
 
+
 function Profile() {
   const [history, setHistory] = useState([]);
   const currentUserUID = auth.currentUser.uid;
