@@ -1,30 +1,23 @@
-import React, { useState, useEffect }  from 'react';
+import { useState, useEffect }  from 'react';
 import SearchIcon from "../assets/SearchIcon.png";
 import FilmIcon from "../components/FilmIcon";
 import "../styles/Movies.css";
 const API_URL = "http://www.omdbapi.com/?i=tt3896198&apikey=d974252a";
 
 
-const Movies = ({ film }) => {
-    const [searchTerm, setSearchTerm] = useState([]);
+const Movies = () => {
+    const [searchTerm, setSearchTerm] = useState("");
     const [films, setFilms] = useState([]);
-  
     const searchFilms = async (title) => { 
         const response = await fetch(`${API_URL}&s=${title}`); 
         const data = response.json(); 
-        console.log(data)
+        console.log(data);
         setFilms(data.Search);
     }
 
     useEffect(() => {
-      //searchFilms("Batman");
+      //searchFilms("Batman")
     }, [searchTerm]);
-
-    const handleKeyPress = (event) => {
-        if (event.key === "Enter") {
-            searchFilms(searchTerm);
-        }
-    };
 
     return (
         <div className='Movies'>
@@ -101,12 +94,10 @@ const Movies = ({ film }) => {
                     <img
                         src={SearchIcon}
                         alt="search"
-                        onClick={() => {searchFilms(searchTerm);
-                        }}
-                        onKeyDown={handleKeyPress}
+                        onClick={() => searchFilms(searchTerm)}
                     /> 
                 </div>
-                {films?.length > 0
+                {films?.length > 0 
                     ? (
                         <div className = "container">
                             {films.map((film) => (
@@ -115,9 +106,10 @@ const Movies = ({ film }) => {
                         </div>
                     ) : (
                         <div className='empty'>
-                            <h2>No movies found</h2>
+                            <h2>No Movies Found</h2>
                         </div>
-                    )}
+                    )
+                }
             </div>
         </div>
     );
