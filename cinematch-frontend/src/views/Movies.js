@@ -10,15 +10,19 @@ const Movies = () => {
     const [films, setFilms] = useState([]);
     const searchFilms = async (title) => { 
         const response = await fetch(`${API_URL}&s=${title}`); 
-        const data = response.json(); 
-        console.log(data);
-        setFilms(data.Search);
+        const data = response.json().then(value=> {
+            console.log(value);
+            setFilms(value.Search);
+        });
     }
 
-    useEffect(() => {
-      //searchFilms("Batman")
-    }, [searchTerm]);
-
+    const handleKeyDown = (event) => {
+        if (event.key == "Enter") {
+            searchFilms(searchTerm);
+        }
+    }
+    useEffect(() => { }, [searchTerm]);
+    
     return (
         <div className='Movies'>
             <div className='genres'>
@@ -90,6 +94,7 @@ const Movies = () => {
                         placeholder='Search for Movies'
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
+                        onKeyDown={handleKeyDown}
                     />
                     <img
                         src={SearchIcon}

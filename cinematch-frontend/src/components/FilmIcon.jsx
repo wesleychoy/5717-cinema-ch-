@@ -8,11 +8,10 @@ const FilmIcon = ({ film }) => {
             </div>
 
             <div>
-                <img src={film.Poster !== 'N/A' ? film.Poster : "https://via,placeholder.com/400"} alt={film.Title} />
+                <img src={film.Poster !== 'N/A' ? film.Poster : "https://placehold.co/900x1378?text=No+Poster"} alt={film.Title} />
             </div>
             
             <div>
-                <span>{film.Type}</span>
                 <h3>{film.Title}</h3>
             </div>
         </div>
