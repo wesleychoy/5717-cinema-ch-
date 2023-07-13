@@ -4,7 +4,7 @@ import FilmIcon from "../components/FilmIcon";
 import "../styles/Movies.css";
 
 const title = '';
-const genre = '';
+
 
 const API_URL = `https://moviesdatabase.p.rapidapi.com/titles/search/title/`;
 
