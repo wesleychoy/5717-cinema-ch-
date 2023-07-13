@@ -4,15 +4,15 @@ const FilmIcon = ({ film }) => {
     return (
         <div className='film'>
             <div>
-                <p>{film.Year}</p>
+                <p>{film.releaseYear.year}</p>
             </div>
 
             <div>
-                <img src={film.Poster !== 'N/A' ? film.Poster : "https://placehold.co/900x1378?text=No+Poster"} alt={film.Title} />
+                <img src={film.primaryImage.url !== 'N/A' ? film.primaryImage.url : "https://placehold.co/900x1378?text=No+Poster"} alt={film.originalTitleText.text} />
             </div>
             
             <div>
-                <h3>{film.Title}</h3>
+                <h3>{film.originalTitleText.text}</h3>
             </div>
         </div>
     );
