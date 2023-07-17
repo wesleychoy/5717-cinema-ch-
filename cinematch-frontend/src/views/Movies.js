@@ -2,17 +2,29 @@ import { useState, useEffect }  from 'react';
 import SearchIcon from "../assets/SearchIcon.png";
 import FilmIcon from "../components/FilmIcon";
 import "../styles/Movies.css";
-const API_URL = "http://www.omdbapi.com/?i=tt3896198&apikey=d974252a";
 
+const title = '';
+
+
+const API_URL = `https://moviesdatabase.p.rapidapi.com/titles/search/title/`;
+
+const options = {
+	method: 'GET',
+	headers: {
+		'X-RapidAPI-Key': 'f2319095f6msh2adb468b1c2ccc2p14e768jsnbcddf91e7698',
+		'X-RapidAPI-Host': 'moviesdatabase.p.rapidapi.com'
+	}
+};
 
 const Movies = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const [films, setFilms] = useState([]);
+
     const searchFilms = async (title) => { 
-        const response = await fetch(`${API_URL}&s=${title}`); 
+        const response = await fetch(`${API_URL}${title}?endYear=2023&titleType=movie`, options); 
         const data = response.json().then(value=> {
             console.log(value);
-            setFilms(value.Search);
+            setFilms(value.results);
         });
     }
 
