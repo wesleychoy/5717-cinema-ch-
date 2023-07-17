@@ -21,7 +21,7 @@ const Movies = () => {
     const [films, setFilms] = useState([]);
 
     const searchFilms = async (title) => { 
-        const response = await fetch(`${API_URL}${title}?titleType=movie`, options); 
+        const response = await fetch(`${API_URL}${title}?endYear=2023&titleType=movie`, options); 
         const data = response.json().then(value=> {
             console.log(value);
             setFilms(value.results);

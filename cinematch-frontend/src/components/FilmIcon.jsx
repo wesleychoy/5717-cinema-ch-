@@ -8,7 +8,7 @@ const FilmIcon = ({ film }) => {
             </div>
 
             <div>
-                <img src={film.primaryImage.url !== 'N/A' ? film.primaryImage.url : "https://placehold.co/900x1378?text=No+Poster"} alt={film.originalTitleText.text} />
+                <img src={film.primaryImage?.url ? film.primaryImage.url : "https://placehold.co/900x1378?text=No+Poster"} alt={film.originalTitleText.text} />
             </div>
             
             <div>
