@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "title": "Discover Your Perfect Movie Match.",
+    "subTitle": "Find your perfect movie match with personalized recommendations.",
+    "image": "../images/misc/discover_movies.jpeg",
+    "alt": "Discover movies",
+    "direction": "row"
+  },
+  {
+    "id": 2,
+    "title": "Movie Nights Made Memorable.",
+    "subTitle": "Rate movies, discover similar ones, and connect with a vibrant community of movie enthusiasts.",
+    "image": "../images/misc/movie_night.jpeg",
+    "alt": "Movie night",
+    "direction": "row-reverse"
+  },
+  {
+    "id": 3,
+    "title": "Bring the Movie Magic to Your Loved Ones.",
+    "subTitle": "Share the joy of great movies with friends and family, and stay up-to-date with the latest hits.",
+    "image": "../images/misc/friends.jpg",
+    "alt": "Friends",
+    "direction": "row"
+  }
+]

@@ -9,6 +9,7 @@ import Movies from "./views/Movies";
 import Friends from "./views/Friends";
 import Profile from "./views/User/Profile";
 import Protected from "./views/Protected";
+import Landing from "./views/Landing";
 import { auth } from './utils/firebase';
 import { onAuthStateChanged } from "firebase/auth";
 
@@ -32,7 +33,8 @@ export default function App() {
     <div className="App">
       <Navbar />
       <Routes>
-        <Route path="/" element={isSignedIn ? <Navigate to ="/home" /> : <Navigate to ="/signin" />} />
+        <Route path="/" element={isSignedIn ? <Navigate to ="/home" /> : <Navigate to ="/landing" />} />
+        <Route path="/landing" element={<Landing />} />
         <Route path="/home" element={<Protected isSignedIn={isSignedIn}><Home /></Protected>} />
         <Route path="/recommendations" element={<Protected isSignedIn={isSignedIn}><Recommendations /></Protected>} />
         <Route path="/movies" element={<Protected isSignedIn={isSignedIn}><Movies /></Protected>} />
