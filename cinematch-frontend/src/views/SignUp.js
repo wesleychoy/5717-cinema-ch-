@@ -1,159 +1,115 @@
-import * as React from 'react';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import Link from '@mui/material/Link';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import React, { useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import { createUserWithEmailAndPassword } from '@firebase/auth';
 import { auth, db } from '../utils/firebase';
-import { useNavigate } from 'react-router-dom';
 import { doc, setDoc } from '@firebase/firestore';
+import HeaderWrapper from "../components/Header/HeaderWrapper";
+import FooterCompound from "../compounds/FooterCompound";
+import SignFormWrapper from "../components/SignForm/SignFormWrapper";
+import SignFormBase from "../components/SignForm/SignFormBase";
+import SignFormTitle from "../components/SignForm/SignFormTitle";
+import SignFormInput from "../components/SignForm/SignFormInput";
+import SignFormButton from "../components/SignForm/SignFormButton";
+import SignFormText from "../components/SignForm/SignFormText";
+import SignFormLink from "../components/SignForm/SignFormLink";
+import SignFormCaptcha from "../components/SignForm/SignFormCaptcha";
+import SignFormError from "../components/SignForm/SignFormError";
+import Logo from "../components/Header/Logo";
 
-function Copyright(props) {
-    return (
-        <Typography variant="body2" color="text.secondary" align="center" {...props}>
-            {'Copyright © '}
-            <Link color="inherit" href="https://mui.com/">
-                Your Website
-            </Link>{' '}
-            {new Date().getFullYear()}
-            {'.'}
-        </Typography>
-    );
+function SignUp() {
+  const navigate = useNavigate();
+  const [firstName, setFirstName] = useState("");
+  const [emailAddress, setEmailAddress] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+
+  const [error, setError] = useState("");
+
+  const IsInvalid = password === "" || emailAddress === "" || firstName === "" || lastName === "" || username === "";
+
+  const handleSignUp = async (event) => {
+    event.preventDefault();
+    try {
+      validateUsername();
+      await createUserWithEmailAndPassword(auth, emailAddress, password).then(() => {
+          console.log("Account created with Firebase Auth");
+      });
+      const document = await setDoc(doc(db, "users", `${auth.currentUser.uid}`), {
+          firstName: firstName,
+          lastName: lastName, 
+          username: username,
+          email: emailAddress  
+      }).then( async () => {
+          await setDoc(doc(db, `users/${auth.currentUser.uid}/history`, "cinematch-dummy-doc"), {
+              movie: 'dummy',
+              rating: 100
+      })
+      }).then(
+          console.log("wrote user to database"),
+          navigate('/home')
+      )
+    }
+    catch (error) {
+      if (error.code == 'auth/email-already-in-use') {
+        setError('Email already in use')
+      } else if (error.code == 'auth/invalid-email') {
+        setError('Please enter a valid email')
+      }
+      console.log(`There was an error: ${error}`);
+    }
+  };
+
+
+  return (
+    <>
+      <HeaderWrapper className="header-wrapper-home">
+        <SignFormWrapper>
+          <SignFormBase onSubmit={handleSignUp} method="POST">
+            <Logo/>
+            <SignFormTitle>Sign Up</SignFormTitle>
+            {error ? <SignFormError>{error}</SignFormError> : null}
+            <SignFormInput
+              type="text"
+              placeholder="First Name"
+              value={firstName}
+              onChange={({ target }) => setFirstName(target.value)}
+            />
+            <SignFormInput
+              type="text"
+              placeholder="Last Name"
+              value={lastName}
+              onChange={({ target }) => setLastName(target.value)}
+            />
+            <SignFormInput
+              type="text"
+              placeholder="Username"
+              value={username}
+              onChange={({ target }) => setUsername(target.value)}
+            />
+            <SignFormInput
+              type="text"
+              placeholder="Email Address"
+              value={emailAddress}
+              onChange={({ target }) => setEmailAddress(target.value)}
+            />
+            <SignFormInput
+              type="password"
+              placeholder="Password"
+              autoComplete="off"
+              value={password}
+              onChange={({ target }) => setPassword(target.value)}
+            />
+            <SignFormButton disabled={IsInvalid}>Sign Up</SignFormButton>
+            <SignFormText>
+              Already a user?
+              <SignFormLink href="/signin">Sign in now.</SignFormLink>
+            </SignFormText>
+          </SignFormBase>
+        </SignFormWrapper>
+      </HeaderWrapper>
+    </>
+  );
 }
 
-// TODO remove, this demo shouldn't need to reset the theme.
-const defaultTheme = createTheme();
-
-export default function SignUp() {
-    const navigate = useNavigate();
-
-    const handleSignUp = async (event) => {
-        event.preventDefault();
-        const data = new FormData(event.currentTarget);
-        try {
-            await createUserWithEmailAndPassword(auth, data.get('email'), data.get('password')).then(() => {
-                console.log("Account created with Firebase Auth");
-            });
-
-            const document = await setDoc(doc(db, "users", `${auth.currentUser.uid}`), {
-                firstName: data.get('firstName'),
-                lastName: data.get('lastName'), 
-                username: data.get('username'),
-                email: data.get('email')  
-            }).then( async () => {
-                await setDoc(doc(db, `users/${auth.currentUser.uid}/history`, "cinematch-dummy-doc"), {
-                    movie: 'dummy',
-                    rating: 100
-            })
-            }).then(
-                console.log("wrote user to database"),
-                navigate('/home')
-            )
-        }
-        catch (error) {
-            console.log(`There was an error: ${error}`);
-        }
-    };
-
-    return (
-        <ThemeProvider theme={defaultTheme}>
-            <Container component="main" maxWidth="xs">
-                <CssBaseline />
-                <Box
-                    sx={{
-                        marginTop: 8,
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                    }}
-                >
-                    <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-                        <LockOutlinedIcon />
-                    </Avatar>
-                    <Typography component="h1" variant="h5">
-                        Sign up
-                    </Typography>
-                    <Box component="form" noValidate onSubmit={handleSignUp} sx={{ mt: 3 }}>
-                        <Grid container spacing={2}>
-                            <Grid item xs={12} sm={6}>
-                                <TextField
-                                    autoComplete="given-name"
-                                    name="firstName"
-                                    required
-                                    fullWidth
-                                    id="firstName"
-                                    label="First Name"
-                                    autoFocus
-                                />
-                            </Grid>
-                            <Grid item xs={12} sm={6}>
-                                <TextField
-                                    required
-                                    fullWidth
-                                    id="lastName"
-                                    label="Last Name"
-                                    name="lastName"
-                                    autoComplete="family-name"
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <TextField
-                                    required
-                                    fullWidth
-                                    id="username"
-                                    label="Username"
-                                    name="username"
-                                    autoComplete="username"
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <TextField
-                                    required
-                                    fullWidth
-                                    id="email"
-                                    label="Email Address"
-                                    name="email"
-                                    autoComplete="email"
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <TextField
-                                    required
-                                    fullWidth
-                                    name="password"
-                                    label="Password"
-                                    type="password"
-                                    id="password"
-                                    autoComplete="new-password"
-                                />
-                            </Grid>
-                        </Grid>
-                        <Button
-                            type="submit"
-                            fullWidth
-                            variant="contained"
-                            sx={{ mt: 3, mb: 2 }}
-                        >
-                            Sign Up
-                        </Button>
-                        <Grid container justifyContent="flex-end">
-                            <Grid item>
-                                <Link href="/signin" variant="body2">
-                                    Already have an account? Sign in
-                                </Link>
-                            </Grid>
-                        </Grid>
-                    </Box>
-                </Box>
-                <Copyright sx={{ mt: 5 }} />
-            </Container>
-        </ThemeProvider>
-    );
-}
+export default SignUp;
