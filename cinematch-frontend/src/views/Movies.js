@@ -1,3 +1,4 @@
+import { Card, Typography } from '@mui/material';
 import { useState, useEffect }  from 'react';
 import SearchIcon from "../assets/SearchIcon.png";
 import FilmIcon from "../components/FilmIcon";
@@ -80,6 +81,9 @@ const Movies = () => {
                         onClick={() => searchFilms(searchTerm)}
                     /> 
                 </div>
+                <Card sx={{ my: 2 }}>
+                    <Typography>Long press on a movie to recommend it to your friends!</Typography>
+                </Card>
                 {films?.length > 0 
                     ? (
                         <div className = "container">
