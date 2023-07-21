@@ -21,15 +21,22 @@ const Movies = () => {
     const [films, setFilms] = useState([]);
 
     const searchFilms = async (title) => { 
-        const response = await fetch(`${API_URL}/search/title/${title}?endYear=2023&titleType=movie`, options); 
+        const response = await fetch(`${API_URL}/search/title/${title}?endYear=2023&titleType=movie&limit=50`, options); 
         const data = response.json().then(value=> {
             console.log(value);
             setFilms(value.results);
         });
     }
 
+    const fetchAllMovies = async () => {
+        const response = await fetch(`${API_URL}?titleType=movie&list=top_rated_english_250&endYear=2023&limit=50`, options);
+        const data = await response.json();
+        console.log(data);
+        setFilms(data.results);
+      };
+    
     const filterByGenre = async (genre) => {
-        const response = await fetch(`${API_URL}?genre=${genre}&titleType=movie&list=most_pop_movies&endYear=2023`, options);
+        const response = await fetch(`${API_URL}?genre=${genre}&titleType=movie&list=most_pop_movies&endYear=2023&limit=50`, options);
         const data = response.json().then(value=> {
             console.log(value);
             setFilms(value.results);
@@ -41,7 +48,10 @@ const Movies = () => {
             searchFilms(searchTerm);
         }
     }
-    useEffect(() => { }, [searchTerm]);
+    //useEffect(() => { }, [searchTerm]);
+    useEffect(() => {
+        fetchAllMovies();
+      }, []);
     
     return (
         <div className='Movies'>
