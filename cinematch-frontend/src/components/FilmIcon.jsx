@@ -7,6 +7,7 @@ import { db, auth } from '../utils/firebase';
 
 const FilmIcon = ({ film }) => {
     const [friends, setFriends] = useState([]);
+    const [friendships, setFriendships] = useState([]);
     const [input, setInput] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
 
@@ -42,14 +43,24 @@ const FilmIcon = ({ film }) => {
     );
 
     React.useEffect(() => {
-        const fetchUsers = async () => {
-            const querySnapshot = await getDocs(collection(db, "users"))
-            setFriends(querySnapshot.docs.map(doc => ({
-                label: doc.data().username
+        onSnapshot(queryFriendsList, (snapshot) => {
+            setFriendships(snapshot.docs.map(doc => ({
+                id: doc.id,
+                item: doc.data()
             })))
-        };
-        fetchUsers();
-    }, [input]);
+        })
+
+        const tempFriends = [];
+        friendships.forEach((friendship) => {
+            if (friendship.item.receiver == currentUserUID) {
+                tempFriends.push({label: friendship.item.senderUsername});
+            } else {
+                tempFriends.push({label: friendship.item.receiverUsername});
+            }
+        })
+
+        setFriends(tempFriends);
+    }, [input]); 
 
     const sendRecommendation = async (e) => {
         e.preventDefault();
