@@ -105,7 +105,7 @@ function Profile() {
       </Stack>
       <Typography variant='h4' color={'black'}>History</Typography>
       <Stack container direction={'column'} spacing={2}>
-        <Stack direction={'row'} justifyContent='left' spacing={2}>
+        <Stack direction={'row'} justifyContent='left' spacing={4} flexWrap={'wrap'}>
           {history.map(item => item.id === 'cinematch-dummy-doc' ? (
             <Typography color={'black'}>RATE A MOVIE AT THE FRONT PAGE TO GET STARTED!</Typography>
             ) : (

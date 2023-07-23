@@ -152,10 +152,10 @@ function Friends() {
             <Typography variant='h4' color={'black'}>Recommendations made to you</Typography>
             {receivedRecommendations ? (
                 <Stack container direction={'column'} spacing={2}>
-                    <Stack direction={'row'} justifyContent='left' spacing={2}>
+                    <Stack direction={'row'} justifyContent='left' spacing={4} flexWrap={'wrap'}>
                         {receivedRecommendations.map(item => (
                             <Stack direction={'column'} alignItems={'center'} spacing={2}>
-                                <Typography variant='subtitle 1' color={'black'}>Recommended by {item.item.senderUsername}</Typography>
+                                <Typography variant='subtitle 1' color={'black'} sx={{ pt: 3 }}>Recommended by {item.item.senderUsername}</Typography>
                                 <FilmIcon key={item.id} film={item.item.film} />
                             </Stack>
                         ))}
