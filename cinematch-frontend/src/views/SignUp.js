@@ -26,7 +26,7 @@ function SignUp() {
 
   const [error, setError] = useState("");
 
-  const IsInvalid = password === "" || emailAddress === "" || firstName === "" || lastName === "" || username === "";
+  const IsInvalid = password.length < 6 || emailAddress === "" || firstName === "" || lastName === "" || username === "";
 
   const handleSignUp = async (event) => {
     event.preventDefault();
@@ -94,7 +94,7 @@ function SignUp() {
             />
             <SignFormInput
               type="password"
-              placeholder="Password"
+              placeholder="Password (at least 6 characters)"
               autoComplete="off"
               value={password}
               onChange={({ target }) => setPassword(target.value)}
