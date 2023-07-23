@@ -1,11 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import "../styles/Home.css";
-import TextField from '@mui/material/TextField';
-import Autocomplete from '@mui/material/Autocomplete';
-import Rating from '@mui/material/Rating';
-import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
+import { Alert, Backdrop, Typography, Rating, Box } from '@mui/material';
 import { Button } from '@mui/base';
 import { auth, db } from '../utils/firebase';
 import { doc, collection, deleteDoc, setDoc } from '@firebase/firestore';
@@ -58,6 +54,10 @@ function Home() {
     } catch (error) {
       console.log(error)
     }
+  }
+
+  const handleCloseBackdrop = () => {
+    setMessage('');
   }
 
   const handleKeyDown = (event) => {
@@ -118,7 +118,13 @@ function Home() {
           />
         </Box>
           <Button variant="contained" color="primary" onClick={sendRating}>Submit rating</Button>
-          {message && <div className="message"> {message} </div>}
+          <Backdrop
+              sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+              open={message.length > 0}
+              onClick={handleCloseBackdrop}
+          >
+              <Alert severity='success'>{message}</Alert>
+          </Backdrop>
       </div>
     </div>
   );

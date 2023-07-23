@@ -5,7 +5,7 @@ import { useLongPress } from 'use-long-press';
 import { collection, query, or, where, getDocs, onSnapshot, and, doc, getDoc, addDoc } from '@firebase/firestore';
 import { db, auth } from '../utils/firebase';
 
-const FilmIcon = ({ film }) => {
+const FilmIcon = ({ film, setSuccess }) => {
     const [friends, setFriends] = useState([]);
     const [friendships, setFriendships] = useState([]);
     const [input, setInput] = useState('');
@@ -92,7 +92,7 @@ const FilmIcon = ({ film }) => {
                     senderUsername: data.senderUsername
                 })
             }).then(() => {
-                console.log('Recommendation Sent!');
+                setSuccess(true);
                 setInput('');
                 handleClose();
             });

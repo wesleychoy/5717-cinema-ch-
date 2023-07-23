@@ -1,4 +1,4 @@
-import { Card, Typography } from '@mui/material';
+import { Alert, Backdrop, Card, Stack, Typography } from '@mui/material';
 import { useState, useEffect }  from 'react';
 import SearchIcon from "../assets/SearchIcon.png";
 import FilmIcon from "../components/FilmIcon";
@@ -20,6 +20,7 @@ const options = {
 const Movies = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const [films, setFilms] = useState([]);
+    const [success, setSuccess] = useState(false);
 
     const searchFilms = async (title) => { 
         const response = await fetch(`${API_URL}/search/title/${title}?endYear=2023&titleType=movie`, options); 
@@ -35,6 +36,10 @@ const Movies = () => {
             console.log(value);
             setFilms(value.results);
         });
+    }
+
+    const handleCloseBackdrop = () => {
+        setSuccess(false);
     }
 
     const handleKeyDown = (event) => {
@@ -81,14 +86,21 @@ const Movies = () => {
                         onClick={() => searchFilms(searchTerm)}
                     /> 
                 </div>
-                <Card sx={{ my: 2 }}>
-                    <Typography>Long press on a movie to recommend it to your friends!</Typography>
-                </Card>
+                <Backdrop
+                    sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                    open={success}
+                    onClick={handleCloseBackdrop}
+                >
+                    <Alert severity='success'>Recommendation sent!</Alert>
+                </Backdrop>
+                <Stack direction={'row'} sx={{ my: 2, width: 400 }} spacing={2}>
+                    <Alert severity='info'>Long press on a movie to recommend it to your friends!</Alert>
+                </Stack>
                 {films?.length > 0 
                     ? (
                         <div className = "container">
                             {films.map((film) => (
-                                <FilmIcon film={film} />
+                                <FilmIcon film={film} setSuccess={setSuccess}/>
                             ))}
                         </div>
                     ) : (
