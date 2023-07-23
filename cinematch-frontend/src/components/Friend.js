@@ -1,39 +1,44 @@
-import { List, ListItem, ListItemAvatar, ListItemText } from '@mui/material';
+import { Card, Stack, Typography } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { db, auth } from '../utils/firebase';
 import { doc, deleteDoc } from '@firebase/firestore';
 import '../styles/Friend.css';
+import FilmIcon from './FilmIcon';
 
 const Friend = ({ arr }) => {
   let isReceiver = arr.item.receiver == auth.currentUser.uid;
   return isReceiver ? (
-    <List className="friend__list">
-      <ListItem>
-        <ListItemAvatar />
-        <ListItemText primary={arr.item.senderUsername} secondary={arr.item.status} />
-      </ListItem>
-      <DeleteIcon
+    <Card sx={{ maxWidth: 800 }}>
+      <Stack direction={'row'} justifyContent='space-between' spacing={2} sx={{ my: 2, p: 2 }}>
+        <Stack direction={'column'} justifyContent='space-between'>
+          <Typography variant='h4'>{arr.item.senderUsername}</Typography>
+          <Typography variant='subtitle1'>{arr.item.status}</Typography>
+        </Stack>
+        <DeleteIcon
         fontSize="large"
         style={{ opacity: 0.7 }}
         onClick={() => {
           deleteDoc(doc(db, "friendRequests", arr.id));
         }}
       />
-    </List>
+      </Stack>
+    </Card>
   ) : (
-    <List className="friend__list">
-      <ListItem>
-        <ListItemAvatar />
-        <ListItemText primary={arr.item.receiverUsername} secondary={arr.item.status} />
-      </ListItem>
-      <DeleteIcon
+    <Card sx={{ maxWidth: 800 }}>
+      <Stack direction={'row'} justifyContent='space-between' spacing={2} sx={{ my: 2, p: 2 }}>
+        <Stack direction={'column'} justifyContent='space-between'>
+          <Typography variant='h4'>{arr.item.receiverUsername}</Typography>
+          <Typography variant='subtitle1'>{arr.item.status}</Typography>
+        </Stack>
+        <DeleteIcon
         fontSize="large"
         style={{ opacity: 0.7 }}
         onClick={() => {
           deleteDoc(doc(db, "friendRequests", arr.id));
         }}
       />
-    </List>
+      </Stack>
+    </Card>
   );
 };
 export default Friend;

@@ -31,7 +31,6 @@ function SignUp() {
   const handleSignUp = async (event) => {
     event.preventDefault();
     try {
-      validateUsername();
       await createUserWithEmailAndPassword(auth, emailAddress, password).then(() => {
           console.log("Account created with Firebase Auth");
       });

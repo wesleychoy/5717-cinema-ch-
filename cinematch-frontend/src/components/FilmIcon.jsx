@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Autocomplete, autocompleteClasses, Button, Popover, TextField, Typography } from '@mui/material';
 import { useState } from 'react';
 import { useLongPress } from 'use-long-press';
@@ -29,8 +29,8 @@ const FilmIcon = ({ film }) => {
         setShowRecommend(!showRecommend);
     }
     const bind = useLongPress(() => {
-        toggleShowRecommend();
         console.log('Long pressed!');
+        toggleShowRecommend();
     });
 
     const currentUserUID = auth.currentUser.uid;
@@ -42,31 +42,25 @@ const FilmIcon = ({ film }) => {
         )
     );
 
-    React.useEffect(() => {
-        onSnapshot(queryFriendsList, (snapshot) => {
-            setFriendships(snapshot.docs.map(doc => ({
-                id: doc.id,
-                item: doc.data()
-            })))
-        })
+    useEffect(() => {
+        const fetchData = async () => {
+            await getDocs(queryFriendsList).then((snapshot) => {
+                console.log(snapshot);
+                setFriendships(snapshot.docs.map(doc => ({
+                    id: doc.id,
+                    item: doc.data()
+                })))
+            })
+        }
 
-        const tempFriends = [];
-        friendships.forEach((friendship) => {
-            if (friendship.item.receiver == currentUserUID) {
-                tempFriends.push({label: friendship.item.senderUsername});
-            } else {
-                tempFriends.push({label: friendship.item.receiverUsername});
-            }
-        })
-
-        setFriends(tempFriends);
-    }, [input]); 
+        fetchData();
+    }, []);
 
     const sendRecommendation = async (e) => {
         e.preventDefault();
         try {
             let data = {
-                title: film,
+                film: film,
                 sender: `${currentUserUID}`,
                 receiver: 'null',
                 receiverUsername: 'null',
@@ -91,7 +85,7 @@ const FilmIcon = ({ film }) => {
                 }
             }).then(() => {
                 addDoc(collection(db, 'friendRecommendations'), {
-                    title: data.title,
+                    film: data.film,
                     sender: data.sender,
                     receiver: data.receiver,
                     receiverUsername: `${input}`,
@@ -137,18 +131,19 @@ const FilmIcon = ({ film }) => {
                     horizontal: 'left',
                 }}
             >
-                {/* <Typography sx={{ p: 2 }}>The content of the Popover.</Typography> */}
                 <Autocomplete
                 disablePortal
                 id="outlined-basic"
-                options={friends}
+                options={
+                    friendships.map(friendship => friendship.item.receiver == currentUserUID ? friendship.item.senderUsername : friendship.item.receiverUsername)
+                }
                 sx={{ width: 300, height: 300 }}
                 onChange={(event, value) => {
                     event.preventDefault();
                     if (value) {
-                        setInput(value.label)}
+                        setInput(value);
                     }
-                }
+                }}
                 renderInput={(params) => <TextField {...params} label="Input Friend's Username"/>}
                 />
                 <Button variant="contained" color="primary" onClick={sendRecommendation}>Send Recommendation</Button>
