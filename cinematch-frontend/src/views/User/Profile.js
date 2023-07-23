@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { collection, query, onSnapshot } from '@firebase/firestore';
+import { collection, query, onSnapshot, getDoc, doc } from '@firebase/firestore';
 import { db, auth } from '../../utils/firebase';
 import { updatePassword } from "firebase/auth";
 import ViewHistory from '../../components/ViewHistory';
@@ -8,6 +8,10 @@ import { Alert, Backdrop, TextField, Typography, Button } from '@mui/material';
 
 
 function Profile() {
+  const [firstName, setFirstName] = useState("");
+  const [emailAddress, setEmailAddress] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [username, setUsername] = useState("");
   const [newPassword, setNewPassword] = useState('');
   const [newPasswordConfirmation, setNewPasswordConfirmation] = useState('');
   const [history, setHistory] = useState([]);
@@ -23,6 +27,13 @@ function Profile() {
           id: doc.id,
           item: doc.data()
       })))
+    })
+
+    getDoc(doc(db, "users", `${currentUserUID}`)).then(doc => {
+      setEmailAddress(doc.data().email)
+      setFirstName(doc.data().firstName)
+      setLastName(doc.data().lastName)
+      setUsername(doc.data().username)
     })
   }, []);
 
@@ -50,7 +61,26 @@ function Profile() {
   return (
     <Stack container direction={'column'} spacing={2} sx={{ my: 1, p: 3 }}>
       <Typography variant='h4' color={'black'}>Account</Typography>
-      <Stack container direction={'column'} spacing={2} sx={{ width: 200 }}>
+      <Stack container direction={'column'} spacing={2} sx={{ width: 400 }}>
+        <TextField
+          id='first_name'
+          value={firstName}
+          disabled/>
+        <TextField
+          id='last_name'
+          value={lastName}
+          disabled/>
+        <TextField
+          id='email'
+          value={emailAddress}
+          disabled/>
+        <TextField
+          id='username'
+          value={username}
+          disabled/>
+        
+        <div/>
+        
         <TextField
           id='new_password'
           label='New Password'
@@ -61,7 +91,7 @@ function Profile() {
           label='Confirm New Password'
           value={newPasswordConfirmation}
           onChange={(event) => setNewPasswordConfirmation(event.target.value)}/>
-        <Button variant='contained' onClick={handleChangePassword}>Change</Button>
+        <Button variant='contained' onClick={handleChangePassword}>Change password</Button>
         {errorMessage && (
           <Alert severity='error'>{errorMessage}</Alert>
         )}
