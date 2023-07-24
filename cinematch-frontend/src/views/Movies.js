@@ -4,9 +4,6 @@ import SearchIcon from "../assets/SearchIcon.png";
 import FilmIcon from "../components/FilmIcon";
 import "../styles/Movies.css";
 
-const title = '';
-
-
 const API_URL = `https://moviesdatabase.p.rapidapi.com/titles`;
 
 const options = {
