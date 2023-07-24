@@ -33,7 +33,7 @@ export default function App() {
     <div className="App">
       <Navbar />
       <Routes>
-        <Route path="/" element={isSignedIn ? <Navigate to ="/home" /> : <Navigate to ="/landing" />} />
+        <Route path="/" element={isSignedIn ? <Navigate to="/home" /> : <Navigate to="/landing" />} />
         <Route path="/landing" element={<Landing />} />
         <Route path="/home" element={<Protected isSignedIn={isSignedIn}><Home /></Protected>} />
         <Route path="/recommendations" element={<Protected isSignedIn={isSignedIn}><Recommendations /></Protected>} />

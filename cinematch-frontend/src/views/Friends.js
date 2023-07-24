@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { TextField, Button } from '@mui/material';
+import { TextField, Button, Card, Stack, Typography, Divider, Alert, CircularProgress} from '@mui/material';
 import Autocomplete from '@mui/material/Autocomplete';
 import { db, auth } from '../utils/firebase';
 import { collection, query, or, where, getDocs, onSnapshot, addDoc, and, doc, getDoc } from '@firebase/firestore';
 import FriendRequest from '../components/FriendRequest';
 import Friend from '../components/Friend';
-import "../styles/Friend.css";
+import FilmIcon from '../components/FilmIcon';
 
 function Friends() {
     const currentUserUID = auth.currentUser.uid;
@@ -21,10 +21,14 @@ function Friends() {
         where('receiver', '==', `${currentUserUID}`))
         )
     );
+    const queryReceivedRecommendations = query(collection(db, 'friendRecommendations'),
+        where('receiver', '==', `${currentUserUID}`));
+
     const [friendRequests, setFriendRequests] = useState([]);
-    const [friends, setFriends] = useState([]);
+    const [friendships, setFriendships] = useState([]);
     const [input, setInput] = useState('');
     const [users, setUsers] = useState([]);
+    const [receivedRecommendations, setReceivedRecommendations] = useState([]);
     const [errorMessage, setErrorMessage] = useState('');
     useEffect(() => {
         onSnapshot(queryRequestList, (snapshot) => {
@@ -33,20 +37,34 @@ function Friends() {
                 item: doc.data()
             })))
         })
-        onSnapshot(queryFriendsList, (snapshot) => {
-            setFriends(snapshot.docs.map(doc => ({
+
+        onSnapshot(queryReceivedRecommendations, (snapshot) => {
+            setReceivedRecommendations(snapshot.docs.map(doc => ({
+                id: doc.id,
+                item: doc.data()
+            })))
+            receivedRecommendations.forEach(rec => {
+                console.log(rec)
+            })
+        })
+
+         onSnapshot(queryFriendsList, (snapshot) => {
+            setFriendships(snapshot.docs.map(doc => ({
                 id: doc.id,
                 item: doc.data()
             })))
         })
+
         const fetchUsers = async () => {
             const querySnapshot = await getDocs(collection(db, "users"))
             setUsers(querySnapshot.docs.map(doc => ({
                 label: doc.data().username
             })))
         };
+
         fetchUsers();
     }, [input]);
+    
     const sendFriendRequest = async (e) => {
         e.preventDefault();
         console.log(input);
@@ -77,7 +95,7 @@ function Friends() {
                                 throw new Error('Request already exists!')
                             }
                         })
-                        friends.forEach((friend) => {
+                        friendships.forEach((friend) => {
                             if ((doc.id == friend.item.receiver && friend.item.sender == currentUserUID) || (doc.id == friend.item.sender && friend.item.receiver == currentUserUID)) {
                                 throw new Error('Friendship already exists!')
                             }
@@ -103,32 +121,52 @@ function Friends() {
     };
     
     return (
-        <div className="friends">
-            <h2> Friend Requests List </h2>
-            <Autocomplete
-                disablePortal
-                id="outlined-basic"
-                options={users}
-                sx={{ width: 300 }}
-                onChange={(event, value) => {
-                    event.preventDefault();
-                    if (value) {
-                        setInput(value.label)}
+        <Stack container direction={'column'} spacing={2} sx={{ my: 1, p: 3 }}>
+            <Typography variant='h4' color={'black'}>Friend Requests</Typography>
+            {errorMessage && (
+                <Alert severity="error">{errorMessage}</Alert>
+            )}
+            <Stack container direction={'row'}>
+                <Autocomplete
+                    disablePortal
+                    id="outlined-basic"
+                    options={users}
+                    sx={{ width: 300 }}
+                    onChange={(event, value) => {
+                        event.preventDefault();
+                        if (value) {
+                            setInput(value.label)}
+                        }
                     }
-                }
-                renderInput={(params) => <TextField {...params} label="Input Username"/>}
-                />
-                <Button variant="contained" color="primary" onClick={sendFriendRequest}>Send Request</Button>
-            {errorMessage && <div className="error"> {errorMessage} </div>}
-            <ul>
-                {friendRequests.map(item => <FriendRequest key={item.id} arr={item} />)}
-            </ul>
-            <h2> Friends List </h2>
-            <ul>
-                {friends.map(item => <Friend key={item.id} arr={item} />)}
-            </ul>
-        </div>
-    );
+                    renderInput={(params) => <TextField {...params} label="Input Username"/>}
+                    />
+                    <Button variant="contained" color="primary" onClick={sendFriendRequest}>Send Request</Button>
+            </Stack>
+            {friendRequests.map(item => <FriendRequest key={item.id} arr={item} />)}
+            <Divider variant='middle' orientation="horizontal" flexItem />
+            <Typography variant='h4' color={'black'}>Friends</Typography>
+            <Stack container direction={'column'} spacing={2}>
+                {friendships.map(item => <Friend key={item.id} arr={item} />)}
+            </Stack>
+            <Divider variant='middle' orientation="horizontal" flexItem />
+            <Typography variant='h4' color={'black'}>Recommendations made to you</Typography>
+            {receivedRecommendations ? (
+                <Stack container direction={'column'} spacing={2}>
+                    <Stack direction={'row'} justifyContent='left' spacing={4} flexWrap={'wrap'}>
+                        {receivedRecommendations.map(item => (
+                            <Stack direction={'column'} alignItems={'center'} spacing={2}>
+                                <Typography variant='subtitle 1' color={'black'} sx={{ pt: 3 }}>Recommended by {item.item.senderUsername}</Typography>
+                                <FilmIcon key={item.id} film={item.item.film} />
+                            </Stack>
+                        ))}
+                    </Stack>
+                </Stack>
+            ) : (
+                <CircularProgress />
+            )}
+
+        </Stack>
+    )
 }
 
 export default Friends;
