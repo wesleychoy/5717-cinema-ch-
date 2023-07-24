@@ -46,6 +46,7 @@ const Recommendations = () => {
   return (
     <div className='Recommendations'>
       <div className='AttributeRecommendations'>
+        <h1>Get Recommendations Based On What You Watched!</h1>
         <input type="text" value={movieName} onChange={(e) => setMovieName(e.target.value)} />
         <button onClick={() => getMovieRecommendations(movieName)}>Get Recommendations</button>
         {recommendedTitles.length > 0 ? (
