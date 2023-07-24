@@ -4,7 +4,7 @@ import { db, auth } from '../../utils/firebase';
 import { updatePassword } from "firebase/auth";
 import ViewHistory from '../../components/ViewHistory';
 import { Stack } from '@mui/system';
-import { Alert, Backdrop, TextField, Typography, Button } from '@mui/material';
+import { Alert, Backdrop, TextField, Typography, Button, Divider } from '@mui/material';
 
 
 function Profile() {
@@ -60,7 +60,7 @@ function Profile() {
 
   return (
     <Stack container direction={'column'} spacing={2} sx={{ my: 1, p: 3 }}>
-      <Typography variant='h4' color={'black'}>Account</Typography>
+      <Typography variant='h4' color={'black'} sx={{ fontSize: 30, fontWeight: 'bold' }}>Account details</Typography>
       <Stack container direction={'column'} spacing={2} sx={{ width: 400 }}>
         <TextField
           id='first_name'
@@ -103,7 +103,9 @@ function Profile() {
           <Alert severity='success'>Password changed!</Alert>
         </Backdrop>
       </Stack>
-      <Typography variant='h4' color={'black'}>History</Typography>
+
+      <Divider orientation="horizontal" flexItem />
+      <Typography variant='h4' color={'black'} sx={{ fontSize: 30, fontWeight: 'bold' }}>History</Typography>
       <Stack container direction={'column'} spacing={2}>
         <Stack direction={'row'} justifyContent='left' spacing={4} flexWrap={'wrap'}>
           {history.map(item => item.id === 'cinematch-dummy-doc' ? (
