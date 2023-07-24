@@ -122,7 +122,7 @@ function Friends() {
     
     return (
         <Stack container direction={'column'} spacing={2} sx={{ my: 1, p: 3 }}>
-            <Typography variant='h4' color={'black'}>Friend Requests</Typography>
+            <Typography variant='h4' color={'black'} sx={{ fontSize: 30, fontWeight: 'bold' }}>Friend Requests</Typography>
             {errorMessage && (
                 <Alert severity="error">{errorMessage}</Alert>
             )}
@@ -144,12 +144,12 @@ function Friends() {
             </Stack>
             {friendRequests.map(item => <FriendRequest key={item.id} arr={item} />)}
             <Divider variant='middle' orientation="horizontal" flexItem />
-            <Typography variant='h4' color={'black'}>Friends</Typography>
+            <Typography variant='h4' color={'black'} sx={{ fontSize: 30, fontWeight: 'bold' }}>Friends</Typography>
             <Stack container direction={'column'} spacing={2}>
                 {friendships.map(item => <Friend key={item.id} arr={item} />)}
             </Stack>
             <Divider variant='middle' orientation="horizontal" flexItem />
-            <Typography variant='h4' color={'black'}>Recommendations made to you</Typography>
+            <Typography variant='h4' color={'black'} sx={{ fontSize: 30, fontWeight: 'bold' }}>Recommendations made to you</Typography>
             {receivedRecommendations ? (
                 <Stack container direction={'column'} spacing={2}>
                     <Stack direction={'row'} justifyContent='left' spacing={4} flexWrap={'wrap'}>

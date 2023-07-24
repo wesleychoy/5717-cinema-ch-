@@ -11,8 +11,8 @@ const FriendRequest = ({ arr }) => {
         <Card sx={{ maxWidth: 800 }}>
             <Stack direction={'row'} justifyContent='space-between' spacing={2} sx={{ my: 2, p: 2 }}>
                 <Stack direction={'column'} justifyContent='space-between'>
-                    <Typography variant='h4'>{arr.item.senderUsername}</Typography>
-                    <Typography variant='subtitle1'>{arr.item.status}</Typography>
+                    <Typography variant='h4' color={'black'} sx={{ fontSize: 20, fontWeight: 'bold' }}>{arr.item.senderUsername}</Typography>
+                    <Typography variant='subtitle1' color={'black'} textTransform={'uppercase'}>{arr.item.status}</Typography>
                 </Stack>
                 <DeleteIcon
                     fontSize="large"
@@ -40,8 +40,8 @@ const FriendRequest = ({ arr }) => {
         <Card sx={{ maxWidth: 800 }}>
             <Stack direction={'row'} justifyContent='space-between' spacing={2} sx={{ my: 2, p: 2 }}>
                 <Stack direction={'column'} justifyContent='space-between'>
-                    <Typography variant='h4'>{arr.item.receiverUsername}</Typography>
-                    <Typography variant='subtitle1'>{arr.item.status}</Typography>
+                    <Typography variant='h4' color={'black'} sx={{ fontSize: 20, fontWeight: 'bold' }}>{arr.item.receiverUsername}</Typography>
+                    <Typography variant='subtitle1' color={'black'} textTransform={'uppercase'}>{arr.item.status}</Typography>
                 </Stack>
                 <DeleteIcon
                 fontSize="large"
