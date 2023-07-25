@@ -67,11 +67,16 @@ function Home() {
         searchFilms(searchTerm);
     }
   }
+  
   useEffect(() => { 
     const fetchUser = async () => {
-      await getDoc(doc(db, 'users', `${auth.currentUser.uid}`)).then((doc) => {
-        setCurrentUserDoc(doc.data());
-      })
+      try {
+        await getDoc(doc(db, 'users', `${auth.currentUser.uid}`)).then((doc) => {
+          setCurrentUserDoc(doc.data());
+        })
+      } catch (error) {
+        console.log(error.message);
+      }
     }
     
     fetchUser();
