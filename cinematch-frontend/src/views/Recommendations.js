@@ -69,45 +69,6 @@ const Recommendations = () => {
         )}
       </div>
       <div className='sliders'>
-        <h1>Based on Your Preferences</h1>
-        <div className='LikedCategory'>
-          <Swiper
-            modules={[Pagination, Navigation]}
-            slidesPerView={3}
-            spaceBetween={10}
-            navigation
-            pagination={{
-              clickable: true,
-            }}
-            onSwiper={(swiper) => console.log(swiper)}
-            onSlideChange={() => console.log('slide change')}
-          >
-            <SwiperSlide>
-              <img src={Placeholder7} alt="TheBigShort" />
-            </SwiperSlide>
-            <SwiperSlide>
-              <img src={Placeholder2} alt="TheDarkKnightRises" />
-            </SwiperSlide>
-            <SwiperSlide>
-              <img src={Placeholder8} alt="Minions" />
-            </SwiperSlide>
-            <SwiperSlide>
-              <img src={Placeholder4} alt="Avengers" />
-            </SwiperSlide>
-            <SwiperSlide>
-              <img src={Placeholder1} alt="BatmanBegins" />
-            </SwiperSlide>
-            <SwiperSlide>
-              <img src={Placeholder6} alt="TheGreenMile" />
-            </SwiperSlide>
-            <SwiperSlide>
-              <img src={Placeholder3} alt="TheDarkKnight" />
-            </SwiperSlide>
-            <SwiperSlide>
-              <img src={Placeholder5} alt="BabyDriver" />
-            </SwiperSlide>
-          </Swiper>
-        </div>
         <h1>Most Popular Movies</h1>
         <div className='PopularCategory'>
           <Swiper
